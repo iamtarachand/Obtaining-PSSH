@@ -1,0 +1,46 @@
+<div class="Post-body" bis_skin_checked="1"><p>PSSH is clearly indicated in MPD file. Download MPD file (browser add-on “MPD Detector” will give you MPD link or filtering for <code style="color: rgb(68, 68, 68);">mpd</code> in the <code style="color: rgb(68, 68, 68);">network</code> tab of devoloper tools (ctrl + shift + c)), open it with Notepad, search for pssh value.</p>
+
+<p>If there is KID, but no PSSH in MPD, calculate PSSH by using KID:</p>
+
+<p>Using <a href="https://tools.axinom.com/generators/PsshBox" rel="ugc nofollow">this</a> website you can get the PSSH by entering in the <code style="color: rgb(68, 68, 68);">urn:uuid:</code> into the <code style="color: rgb(68, 68, 68);">System ID</code> field and entering the <code style="color: rgb(68, 68, 68);">cenc:default_KID=</code> into the <code style="color: rgb(68, 68, 68);">KEY IDs</code> field without the quotes <code style="color: rgb(68, 68, 68);">""</code></p>
+
+<p>Eample:<br>
+<a href="https://git.drmstuff.com/Apocalypse/DRMStuff/media/branch/main/img/example_one.png" rel="ugc nofollow"><img src="https://git.drmstuff.com/Apocalypse/DRMStuff/media/branch/main/img/example_one.png" title="" alt=""></a></p>
+
+<p>Recommended method<br>
+<a href="https://greasyfork.org/en/scripts/373903-eme-logger" rel="ugc nofollow">EME Logger Script</a> (installed on <a href="https://www.tampermonkey.net/" rel="ugc nofollow">Tampermonkey</a> add-on) will give you init data. That’s your PSSH. This can be found on Developer Tools (ctrl + shift + c) &gt; Console, in the filter bar search for <code style="color: rgb(68, 68, 68);">MediaKeySession::generateRequest</code> you will find Init Data.<br>
+<strong>Optional, may be rquired:</strong></p>
+
+<p>If that Init Data is very very long, convert it to HEX: <a href="https://base64.guru/converter/decode/hex" rel="ugc nofollow">https://base64.guru/converter/decode/hex</a></p>
+
+<p>Here’s what mine looked like before conversion.<br>
+<a href="https://git.drmstuff.com/Apocalypse/DRMStuff/media/branch/main/img/example_two.png" rel="ugc nofollow"><img src="https://git.drmstuff.com/Apocalypse/DRMStuff/media/branch/main/img/example_two.png" title="" alt=""></a></p>
+
+<p>After Base64 &gt; HEX conversion, you will find a Widevine-PSSH box, this can be found easily by searching with ctrl + f and searching for <code style="color: rgb(68, 68, 68);">70737368</code></p>
+
+<p>PSSH header is always in a <code style="color: rgb(68, 68, 68);">000000xx70737368</code> where the <code style="color: rgb(68, 68, 68);">xx</code> is varied and can be from 1-9 in both x spots. You always want to copy the 6 0’s before the xx as well.</p>
+
+<p>Example:<br>
+<a href="https://git.drmstuff.com/Apocalypse/DRMStuff/media/branch/main/img/example_three.png" rel="ugc nofollow"><img src="https://git.drmstuff.com/Apocalypse/DRMStuff/media/branch/main/img/example_three.png" title="" alt=""></a><br>
+The end of the header is always then followed by 8 more 0s, if you see this, you are in the right place.</p>
+
+<p>Once you find the header start at the beginning 0 from the header and copy until the end of the converted hex, it should look like this</p>
+
+<p>Example: <br>
+<a href="https://git.drmstuff.com/Apocalypse/DRMStuff/media/branch/main/img/example_four.png" rel="ugc nofollow"><img src="https://git.drmstuff.com/Apocalypse/DRMStuff/media/branch/main/img/example_four.png" title="" alt=""></a></p>
+
+<p>In this case the full value was <code style="color: rgb(68, 68, 68);">000000577073736800000000edef8ba979d64acea3c827dcd51d21ed0000003708011210162f7d326cf24f6dbd1319bc572bbc151a0b62757964726d6b65796f732210162f7d326cf24f6dbd1319bc572bbc152a024844</code></p>
+
+<p>convert the hex back into base64 using <a href="https://base64.guru/converter/encode/hex" rel="ugc nofollow">https://base64.guru/converter/encode/hex</a></p>
+
+<p>Example:<br>
+<a href="https://git.drmstuff.com/Apocalypse/DRMStuff/media/branch/main/img/example_five.png" rel="ugc nofollow"><img src="https://git.drmstuff.com/Apocalypse/DRMStuff/media/branch/main/img/example_five.png" title="" alt=""></a></p>
+
+<p>In this case we got the PSSH value of <code style="color: rgb(68, 68, 68);">AAAAV3Bzc2gAAAAA7e+LqXnWSs6jyCfc1R0h7QAAADcIARIQFi99MmzyT229Exm8Vyu8FRoLYnV5ZHJta2V5b3MiEBYvfTJs8k9tvRMZvFcrvBUqAkhE</code></p>
+
+<p>Congrats, you have the PSSH!</p>
+
+<p>Using init files<br>
+You can use this <a href="https://git.drmstuff.com/Apocalypse/DRMStuff/src/branch/main/tools/get_pssh_from_init.py" rel="ugc nofollow">tool</a> to obtain the PSSH from an init file</p>
+
+<p>Source: VideoHelp</p></div>
